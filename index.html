@@ -21,11 +21,13 @@
           // mentioned in Mainactivity.Java
           Dialog.showMsg();
           }
-       
+       function result(param){
+       document.getElementById("res").innerHTML = param;
+       }
     </script>
 <body>
     <h1>lalalalal</h1>
-    <h2>lolol</h2>
+    <h2 id = "res">lolol</h2>
     <button onclick="msg();">onclick</button>
 </body>
 </html>
