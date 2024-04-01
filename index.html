@@ -1,33 +1,41 @@
 <html>
 
 <head></head>
-    <script>
-        // To test web flow in android webview
-        // closeAPP();
-        // function closeAPP(){
-        //     Android.closeWebView();
-        // }
+<script>
+function validate(evt) {
+  var theEvent = evt || window.event;
 
-        // To test deep link
-// <a href="intent:#Intent;scheme=startci;package=gramener.star;end">click here</a>
-        // window.location.href='https://play.google.com/store/apps/details?id=com.giftbig.mobile&referrer=BlahBlah'
-
-        // pos.testPlutus();
-     
+  // Handle paste
+  if (theEvent.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+  } else {
+  // Handle key press
+      var key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode(key);
+  }
+  var regex = /[0-9]|\./;
+  if( !regex.test(key) ) {
+    theEvent.returnValue = false;
+    if(theEvent.preventDefault) theEvent.preventDefault();
+  }
+}
       function msg(){
-       
-        
-          // Dialog is javascript interface name
-          // mentioned in Mainactivity.Java
-          Dialog.showMsg();
-          }
-       function result(param){
-       document.getElementById("res").innerHTML = param;
+          var a = document.getElementById("amount").value;
+          console.log(a);
+          Plutus.pay(a);
+      }
+       function result(status,resp){
+                document.getElementById("stat").innerHTML = status;
+                document.getElementById("res").innerHTML = resp;
        }
     </script>
 <body>
-    <h1>lalalalal</h1>
-    <h2 id = "res">lolol</h2>
-    <button onclick="msg();">onclick</button>
+
+
+<h1>Make Payment</h1>
+<input type="text" id="amount" onkeypress='validate(event)'>
+<button onclick="msg();">PAY</button>
+<h2 id = "stat"></h2>
+<h2 id = "res"></h2>
 </body>
 </html>
