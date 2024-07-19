@@ -18,6 +18,7 @@
         // Function to request OTP
         async function requestOTP() {
             try {
+                console.log("enter the dragon");
                 const otp = await navigator.credentials.get({
                     otp: { transport: ['sms'] },
                     signal: new AbortController().signal
