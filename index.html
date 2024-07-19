@@ -1,41 +1,49 @@
-<html>
-
-<head></head>
-<script>
-function validate(evt) {
-  var theEvent = evt || window.event;
-
-  // Handle paste
-  if (theEvent.type === 'paste') {
-      key = event.clipboardData.getData('text/plain');
-  } else {
-  // Handle key press
-      var key = theEvent.keyCode || theEvent.which;
-      key = String.fromCharCode(key);
-  }
-  var regex = /[0-9]|\./;
-  if( !regex.test(key) ) {
-    theEvent.returnValue = false;
-    if(theEvent.preventDefault) theEvent.preventDefault();
-  }
-}
-      function msg(){
-          var a = document.getElementById("amount").value;
-          console.log(a);
-          Plutus.pay(a);
-      }
-       function result(status,resp){
-                document.getElementById("stat").innerHTML = status;
-                document.getElementById("res").innerHTML = resp;
-       }
-    </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOTP Integration Example</title>
+</head>
 <body>
+    <h1>WebOTP Integration Example</h1>
+    <button onclick="requestOTP()">Request OTP</button>
+    <p id="otpInput">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp">
+        <button onclick="verifyOTP()">Verify OTP</button>
+    </p>
 
+    <script>
+        // Function to request OTP
+        async function requestOTP() {
+            try {
+                const otp = await navigator.credentials.get({
+                    otp: { transport: ['sms'] },
+                    signal: new AbortController().signal
+                });
 
-<h1>Make Payment</h1>
-<input type="text" id="amount" onkeypress='validate(event)'>
-<button onclick="msg();">PAY</button>
-<h2 id = "stat"></h2>
-<h2 id = "res"></h2>
+                // Display OTP input field
+                document.getElementById('otpInput').style.display = 'block';
+
+                // Auto-fill OTP field (for demonstration purposes)
+                document.getElementById('otp').value = otp.code;
+            } catch (err) {
+                console.error('Error requesting OTP:', err);
+            }
+        }
+
+        // Function to verify OTP (for demonstration purposes)
+        function verifyOTP() {
+            const enteredOTP = document.getElementById('otp').value;
+
+            // You can add your verification logic here
+            if (enteredOTP.trim() === '') {
+                alert('Please enter OTP');
+            } else {
+                alert('OTP verified successfully!');
+            }
+        }
+    </script>
 </body>
 </html>
