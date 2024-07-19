@@ -22,9 +22,9 @@
                     otp: { transport: ['sms'] },
                     signal: new AbortController().signal
                 });
-
+                console.log("here",otp);
                 // Display OTP input field
-                document.getElementById('otpInput').style.display = 'block';
+                // document.getElementById('otpInput').style.display = 'block';
 
                 // Auto-fill OTP field (for demonstration purposes)
                 document.getElementById('otp').value = otp.code;
