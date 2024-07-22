@@ -22,7 +22,10 @@
                 const otp = await navigator.credentials.get({
                     otp: { transport: ['sms'] },
                     signal: new AbortController().signal
-                });
+                }).then((otp)=> {
+                    console.log("here",otp);
+                }
+                );
                 console.log("here",otp);
                 // Display OTP input field
                 // document.getElementById('otpInput').style.display = 'block';
