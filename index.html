@@ -1,53 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebOTP Integration Example</title>
-</head>
-<body>
-    <h1>WebOTP Integration Example</h1>
-    <button onclick="requestOTP()">Request OTP</button>
-    <p id="otpInput">
-        <label for="otp">Enter OTP:</label>
-        <input type="text" id="otp" name="otp">
-        <button onclick="verifyOTP()">Verify OTP</button>
-    </p>
-
+  <head>
+    <title>Web OTP API Simplest</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>div {font-family: sans-serif;}</style>
+  </head>
+  <body>
+    <h1>
+      The simplest Web OTP API demo
+    </h1>
+    <div>
+      Send an SMS that includes <pre><code>@nironix.github.io/ #12345</code></pre> at the last line to this phone.
+    </div>
+    <div style="border:1px solid; padding: 5px; 10px; margin: 10px 0;">
+      <form action="/post" method="post">
+        Enter OTP here:
+        <input type="text" autocomplete="one-time-code" inputmode="numeric" name="one-time-code">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <pre><code>
+<input type="text" autocomplete="one-time-code" inputmode="numeric" />
+<script>
+if ('OTPCredential' in window) {
+  window.addEventListener('DOMContentLoaded', e => {
+    const input = document.querySelector('input[autocomplete="one-time-code"]');
+    if (!input) return;
+    const ac = new AbortController();
+    const form = input.closest('form');
+    if (form) {
+      form.addEventListener('submit', e => {
+        ac.abort();
+      });
+    }
+    navigator.credentials.get({
+      otp: { transport:['sms'] },
+      signal: ac.signal
+    }).then(otp => {
+      input.value = otp.code;
+      if (form) form.submit();
+    }).catch(err => {
+      console.log(err);
+    });
+  });
+}
+</script>
+    </code></pre>
+    <div>
+      See the source code and play with it at <a href="https://glitch.com/edit/#!/web-otp">https://glitch.com/edit/#!/web-otp</a>
+    </div>
+    <div>
+      Learn more at <a href="http://web.dev/web-otp">http://web.dev/web-otp</a>.
+    </div>
     <script>
-        // Function to request OTP
-        async function requestOTP() {
-            try {
-                console.log("enter the dragon");
-                const otp = await navigator.credentials.get({
-                    otp: { transport: ['sms'] },
-                    signal: new AbortController().signal
-                }).then((otp)=> {
-                    console.log("here",otp);
-                }
-                );
-                console.log("here",otp);
-                // Display OTP input field
-                // document.getElementById('otpInput').style.display = 'block';
-
-                // Auto-fill OTP field (for demonstration purposes)
-                document.getElementById('otp').value = otp.code;
-            } catch (err) {
-                console.error('Error requesting OTP:', err);
-            }
+    if ('OTPCredential' in window) {
+      window.addEventListener('DOMContentLoaded', e => {
+        const input = document.querySelector('input[autocomplete="one-time-code"]');
+        if (!input) return;
+        const ac = new AbortController();
+        const form = input.closest('form');
+        if (form) {
+          form.addEventListener('submit', e => {
+            ac.abort();
+          });
         }
-
-        // Function to verify OTP (for demonstration purposes)
-        function verifyOTP() {
-            const enteredOTP = document.getElementById('otp').value;
-
-            // You can add your verification logic here
-            if (enteredOTP.trim() === '') {
-                alert('Please enter OTP');
-            } else {
-                alert('OTP verified successfully!');
-            }
-        }
+        navigator.credentials.get({
+          otp: { transport:['sms'] },
+          signal: ac.signal
+        }).then(otp => {
+          input.value = otp.code;
+          if (form) form.submit();
+        }).catch(err => {
+          console.log(err);
+        });
+      });
+    } else {
+        console.log("not here");
+    }
     </script>
-</body>
+  </body>
 </html>
